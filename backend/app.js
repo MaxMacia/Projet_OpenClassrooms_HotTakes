@@ -25,7 +25,19 @@ app.use((req, res, next) => {
 });
 
 app.post('/api/auth/signup', (req, res, next) => {
-    
+    bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+        const user = new User({
+            email: req.body.email,
+            password: hash
+        });
+        return user.save()
+        .then(() => {
+            const message = "Utilisateur enregistré";
+            res.status(201).json(message);
+        })
+    })
+    .catch(error => res.status(500).json({ error }));
 });
 
 module.exports = app;
