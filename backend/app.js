@@ -40,4 +40,28 @@ app.post('/api/auth/signup', (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 });
 
+app.post('/api/auth/login', (req, res, next) => {
+    User.findOne({ email: req.body.email })
+    .then(user => {
+        if (user == null) {
+            const message = "Paire identifiant/mot de passe invalide";
+            res.status(401).json({ message });
+        } else {
+            return bcrypt.compare(req.body.password, user.password)
+            .then(valid => {
+                if (!valid) {
+                    const message = "Paire identifiant/mot de passe invalide";
+                    res.status(401).json({ message });
+                } else {
+                    res.status(200).json({
+                        userId: user._id,
+                        token: 'TOKEN'                        
+                    });
+                }
+            })
+        }
+    })
+    .catch(error => res.status(500).json({ error }));
+});
+
 module.exports = app;
