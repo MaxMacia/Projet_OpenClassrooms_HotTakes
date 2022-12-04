@@ -8,7 +8,7 @@ const MIME_TYPES = {
 
 const storage = multer.storage({
     destination: (req, file, callback) => {
-        callback(null, 'images');
+        callback(null, '../images');
     },
     filename: (req, file, callback) => {
         const name = file.originalname.split(' ').join('_');
@@ -17,4 +17,12 @@ const storage = multer.storage({
     }
 });
 
-module.exports = multer({ storage }).single('image');
+const fileFilter = (req, file, callback) => {
+    if (file.mimetype.includes('jpg') || file.mimetype.includes('jpeg') || file.mimetype.includes('png')) {
+        callback(null, true);
+    } else {
+        callback(null, false);
+    }
+};
+
+module.exports = multer({ storage, fileFilter }).single('image');
