@@ -6,6 +6,8 @@ const Sauce = require('./models/Sauce');
 const app = express();
 
 const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauce');
+
 
 mongoose.connect(
     "mongodb+srv://MaxMacia:211089Mn@cluster0.ib5vpwf.mongodb.net/?retryWrites=true&w=majority",
@@ -29,34 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/api/auth', userRoutes);
-
-app.get('/api/sauces/:id', (req, res, next) => {
-    Sauce.find()
-    .then(sauces => {
-        const sauceId = sauces.find(sauce => sauce._id == req.params.id);
-        if (sauceId == undefined) {
-            const message = "La sauce demandée n'existe pas, veuillez essayer un autre identifiant";
-            res.status(404).json({ message });
-        } else {
-            return Sauce.findOne({ _id: req.params.id })
-            .then(sauce => {
-                const message = "Voici la sauce demandée";
-                res.status(200).json({ message, sauce });
-            })
-        }
-    })
-    .catch(error => res.status(500).json({ error }));
-});
-
-app.get('/api/sauces', (req, res, next) => {
-    Sauce.find()
-    .then(sauces => {
-        const message = "Voici la liste des sauces";
-        res.status(200).json({ message, sauces });
-    })
-    .catch(error => res.status(500).json({ error }));
-});
-
+app.use('/api/sauces', sauceRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')))
 
 module.exports = app;
