@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { findOne } = require('../models/Sauce');
 const Sauce = require('../models/Sauce');
 
 exports.createSauce = (req, res, next) => {
@@ -109,3 +110,64 @@ exports.getSauces = (req, res, next) => {
     .then(sauces => res.status(200).json(sauces))
     .catch(error => res.status(500).json({ error }));
 }
+
+exports.likeSauce = (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+    .then(sauce => {
+        switch (true) {
+            case !sauce.usersLiked.includes(req.body.userId) && !sauce.usersDisliked.includes(req.body.userId) && req.body.like == 1:
+                return Sauce.updateOne(
+                    { _id: req.params.id },
+                    {
+                        $inc: { likes: 1 },
+                        $push: { usersLiked: req.body.userId }
+                    }
+                    )
+                .then(() => {
+                    const message = "Sauce like +1";
+                    res.status(201).json({ message });
+                });
+                break;
+            case sauce.usersLiked.includes(req.body.userId) && !sauce.usersDisliked.includes(req.body.userId) && req.body.like == 0:
+                return Sauce.updateOne(
+                    { _id: req.params.id },
+                    {
+                        $inc: { likes: -1 },
+                        $pull: { usersLiked: req.body.userId }
+                    }
+                    )
+                .then(() => {
+                    const message = "Sauce like 0";
+                    res.status(201).json({ message });
+                });
+                break;
+            case !sauce.usersLiked.includes(req.body.userId) && !sauce.usersDisliked.includes(req.body.userId) && req.body.like == -1:
+                return Sauce.updateOne(
+                    { _id: req.params.id },
+                    {
+                        $inc: { dislikes: 1 },
+                        $push: { usersDisliked: req.body.userId }
+                    }
+                    )
+                .then(() => {
+                    const message = "Sauce dislike +1";
+                    res.status(201).json({ message });
+                });
+                break;
+            case !sauce.usersLiked.includes(req.body.userId) && sauce.usersDisliked.includes(req.body.userId) && req.body.like == 0:
+                return Sauce.updateOne(
+                    { _id: req.params.id },
+                    {
+                        $inc: { dislikes: -1 },
+                        $pull: { usersDisliked: req.body.userId }
+                    }
+                    )
+                .then(() => {
+                    const message = "Sauce dislike 0";
+                    res.status(201).json({ message });
+                });
+                break;
+        }
+    })
+    .catch(error => res.status(500).json({ error }));
+};
