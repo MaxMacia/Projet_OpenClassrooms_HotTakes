@@ -1,5 +1,4 @@
 const fs = require('fs');
-const { findOne } = require('../models/Sauce');
 const Sauce = require('../models/Sauce');
 
 exports.createSauce = (req, res, next) => {
@@ -96,13 +95,11 @@ exports.deleteSauce = (req, res, next) => {
 
 exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
-    .then(sauce => {
-        if (sauce == null) {
-            const message = "La sauce demandée n'existe pas";
-            res.status(404).json({ message });
-        } else { res.status(200).json(sauce) }
-    })
-    .catch(error => res.status(500).json({ error }));
+    .then(sauce => { res.status(200).json(sauce) })
+    .catch(error => {
+        const message = "La sauce demandée n'existe pas";
+        res.status(404).json({ message });
+    });
 }
 
 exports.getSauces = (req, res, next) => {
