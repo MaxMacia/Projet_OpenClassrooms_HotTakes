@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const path = require('path');
 const User = require('./models/User');
 const Sauce = require('./models/Sauce');
@@ -22,6 +23,7 @@ User.watch().on('change', data => console.log(new Date(), data));
 Sauce.watch().on('change', data => console.log(new Date(), data));
 
 app.use(express.json());
+app.use(helmet());
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
