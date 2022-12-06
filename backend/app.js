@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const helmet = require('helmet');
 const path = require('path');
 const User = require('./models/User');
@@ -9,9 +10,10 @@ const app = express();
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauce');
 
+dotenv.config();
 
 mongoose.connect(
-    "mongodb+srv://MaxMacia:211089Mn@cluster0.ib5vpwf.mongodb.net/?retryWrites=true&w=majority",
+    `mongodb+srv://${process.env.MONGO_SECRET}.ib5vpwf.mongodb.net/?retryWrites=true&w=majority`,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
