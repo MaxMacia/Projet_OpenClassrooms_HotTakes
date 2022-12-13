@@ -10,8 +10,8 @@ validatorSchema
 .has().digits(2);
 
 const passwordErrorsMessages = {
-    min: 'Password should be at least 8 characters long',
-    max: 'Password should be be a maximum of 64 characters long',
+    min: 'Password should be at least 6 characters long',
+    max: 'Password should be be a maximum of 20 characters long',
     uppercase: 'Password should have uppercase characters',
     lowercase: 'Password should have lowercase characters',
     digits: 'Password should contain digits'
