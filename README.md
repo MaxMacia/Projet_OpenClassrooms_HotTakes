@@ -1,5 +1,12 @@
 # HotTakes
 
+HotTakes, application web critique de sauces piquantes, est le cinquième projet OpenClassrooms. 
+
+L’objectif était de créer une API REST avec Node.js et le framework express. 
+
+Utilisation de la base de donnée noSQL MongoDB. Mise en place des différente routes CRUD (create – read – update- delete). Mise en place d’une gestion de l’upload des fichiers (via la librairie multer). Mise en place d’un système d’authentification pour les utilisateurs. Gestion de la sécurité ( via les librairies bcrypt, heltmet, password-validator, jsonwebtoken). 
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.2.4.
 
 ## Development server
